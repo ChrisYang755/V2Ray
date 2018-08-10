@@ -12,11 +12,11 @@ yum install socat nginx -y
 ## Step 2.
 ```bash
 # Get your access key `https://ram.console.aliyun.com/#/user/list?guide` if your domain host on aliyun
-export Ali_Key="your key"
-export Ali_Secret="your secret"
 # Install cert
 curl https://get.acme.sh | sh
 acme.sh --upgrade --auto-upgrade
+export Ali_Key="yourKey"
+export Ali_Secret="yourSecret"
 acme.sh --force --issue --dns dns_ali -d *.yourdomain -d yourdomain --dnssleep 0
 mkdir -p /etc/nginx/ssl
 acme.sh --install-cert -d "*.yourdomain" --key-file "/etc/nginx/ssl/*.yourdomain.key" --fullchain-file "/etc/nginx/ssl/fullchain.cer" --reloadcmd "systemctl force-reload nginx"
@@ -106,6 +106,5 @@ server {
 
 ## Step 5.
 ```bash
-systemctl start v2ray
-systemctl start nginx
+systemctl start v2ray && systemctl ebable v2ray && systemctl start nginx && systemctl enable nginx
 ```
