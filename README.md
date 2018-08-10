@@ -69,14 +69,18 @@ bash <(curl -L -s https://install.direct/go.sh)
 ```nginx
 server {
   server_name *.yourdomain yourdomain;
+  listen 80;
+  return 301 https://$host$request_uri;
+}
+server {
+  server_name *.yourdomain yourdomain;
   listen 443 ssl http2;
 
   ssl_certificate /etc/nginx/ssl/fullchain.cer;
   ssl_certificate_key /etc/nginx/ssl/*.yourdomain.key;
 
-  ssl_session_cache shared:SSL:10m;
-
-  gzip off;
+  add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
+  gzip on;
 
   location / {
     root /srv/yourdomain/;
@@ -88,6 +92,9 @@ server {
 
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    proxy_intercept_errors on;
+    error_page 400 /404.html;
 
     proxy_redirect off;
     proxy_http_version 1.1;
