@@ -103,8 +103,58 @@ server {
   }
 }
 ```
+### vi /etc/nginx/conf.d/yourdomain.conf
+```nginx
+user nginx;
+worker_processes auto;
+error_log /dev/null;
+pid /run/nginx.pid;
+
+include /usr/share/nginx/modules/*.conf;
+
+events {
+  use epoll;
+  worker_connections 2048;
+}
+
+http {
+    access_log off;
+    error_log /dev/null;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    include /etc/nginx/conf.d/*.conf;
+
+    server {
+        listen       80 default_server;
+        listen       [::]:80 default_server;
+        server_name  _;
+        root         /usr/share/nginx/html;
+
+        include /etc/nginx/default.d/*.conf;
+
+        location / {
+        }
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+}
+```
 
 ## Step 5.
 ```bash
-systemctl start v2ray && systemctl ebable v2ray && systemctl start nginx && systemctl enable nginx
+systemctl start v2ray && systemctl enable v2ray && systemctl start nginx && systemctl enable nginx
 ```
