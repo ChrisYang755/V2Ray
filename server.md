@@ -103,7 +103,7 @@ server {
   }
 }
 ```
-### vi /etc/nginx/conf.d/yourdomain.conf
+### vi /etc/nginx/nginx.conf
 ```nginx
 user nginx;
 worker_processes auto;
