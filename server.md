@@ -5,7 +5,8 @@ base on CentOS 7
 ## Step 1.
 ```bash
 # Env
-firewall-cmd --zone=public --add-port=443/tcp --add-port=80/tcp --add-service=https --permanent
+firewall-cmd --zone=public --add-port=443/tcp --add-port=80/tcp --permanent
+firewall-cmd --zone=public --add-service=https --permanent
 yum install socat nginx -y
 ```
 
